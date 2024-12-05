@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:pizzeria/models/cart.dart';
+import 'package:pizzeria/ui/share/buy_button_widget.dart';
 import '../models/pizza.dart';
 import '../models/pizza_data.dart';
+import 'pizza_details.dart';
+import 'share/appbar_widget.dart';
+
 
 class PizzaList extends StatefulWidget {
-  List<Pizza> _pizzas = [];
+  final Cart _cart;
+  const PizzaList(this._cart, {Key? key}) : super(key: key);
 
   @override
   State<PizzaList> createState() => _PizzaListState();
@@ -11,18 +17,18 @@ class PizzaList extends StatefulWidget {
 
 class _PizzaListState extends State<PizzaList> {
   List<Pizza> _pizzas = [];
+  final title = 'Nos pizzas';
   
   @override
   void initState() {
+    super.initState();
     _pizzas = PizzaData.buildList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Nos Pizzas'),
-      ),
+      appBar: AppbarWidget(title, widget._cart),
       body: ListView.builder(
         padding:const EdgeInsets.all(8.0),
         itemCount: _pizzas.length,
@@ -38,16 +44,36 @@ class _PizzaListState extends State<PizzaList> {
       shape:const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom:Radius.circular(10.0),
-          top: Radius.circular(2.0),
-        ),
+          top: Radius.circular(2.0)),
       ),
       child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PizzaDetails(pizza, widget._cart),
+              ),
+            );
+          },
+          child: _buildPizzaDetails(pizza),
+        ),
+        BuyButtonWidget(pizza, widget._cart),
+      ],
+    )
+    );
+  }
+
+  _buildPizzaDetails(Pizza pizza) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ListTile(
           title: Text(pizza.title),
           subtitle: Text(pizza.garniture),
-          leading: const Icon(Icons.local_pizza),
+          leading: Icon(Icons.local_pizza),
         ),
         Image.asset(
           'assets/images/pizzas/${pizza.image}',
@@ -59,28 +85,31 @@ class _PizzaListState extends State<PizzaList> {
           padding: const EdgeInsets.all(4.0),
           child: Text(pizza.garniture),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: 
-                  MaterialStateProperty.all<Color>(Colors.red.shade800)),
-              child: const Row(
-                children: [
-                  Icon(Icons.shopping_cart),
-                  SizedBox(width: 5),
-                  Text('Commander'),
-                ],
-              ),
-              onPressed: () {
-                print('Commande de la pizza ${pizza.title}');
-              },
-            )
-          ],
-        )
       ],
-    )
     );
+  }
+
+  _buildBuyButton() {
+    return
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: 
+              MaterialStateProperty.all<Color>(Colors.red.shade800)),
+            child: const Row(
+              children: [
+                Icon(Icons.shopping_cart),
+                SizedBox(width: 5),
+                Text('Commander'),
+              ],
+            ),
+            onPressed: () {
+              print('Commander une pizza');
+            },
+          ),
+        ],
+      );
   }
 }

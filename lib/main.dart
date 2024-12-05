@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pizzeria/models/cart.dart';
+import 'package:pizzeria/ui/share/appbar_widget.dart';
 import 'models/menu.dart';
 import 'ui/pizza_list.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -12,22 +15,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: MyHomePage(title: 'Pizzéria'),
       title: 'Pizzéria',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(title: 'Notre pizzéria'),
     );
   }
 }
 
-// Suppression des classes MyHomePage et _MyHomePageState
-
 class MyHomePage extends StatelessWidget {
   final String title;
+  Cart _cart;
 
-  MyHomePage({super.key, required this.title});
+  MyHomePage({required this.title, Key? key}) :
+    _cart = Cart(), 
+    super(key: key);
+    
 
   final _menus = [
   Menu(type: 1, title: 'Entrées', image: 'entree.png', color: Colors.lightGreen),
@@ -40,9 +45,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('title'),
-      ),
+      appBar: AppbarWidget(title, _cart),
       body: Center(
         child: ListView.builder(
           itemCount: _menus.length,
@@ -52,7 +55,7 @@ class MyHomePage extends StatelessWidget {
                 case 2:
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PizzaList()),
+                    MaterialPageRoute(builder: (context) => PizzaList(_cart)),
                   );
                   break;
               }
