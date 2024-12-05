@@ -7,6 +7,12 @@ class Pizza{
   final String image;
   final double price;
   
+  Pizza.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      title = json['title'],
+      garniture = json['garniture'],
+      image = json['image'],
+      price = json['price'];
 
   int pate = 0;
   int taille = 1;

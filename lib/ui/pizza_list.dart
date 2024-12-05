@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pizzeria/models/cart.dart';
+import 'package:pizzeria/services.dart/pizzeria_service.dart';
 import 'package:pizzeria/ui/share/buy_button_widget.dart';
+import 'package:pizzeria/ui/share/pizzeria_style.dart';
 import '../models/pizza.dart';
-import '../models/pizza_data.dart';
 import 'pizza_details.dart';
 import 'share/appbar_widget.dart';
 
@@ -16,27 +17,44 @@ class PizzaList extends StatefulWidget {
 }
 
 class _PizzaListState extends State<PizzaList> {
-  List<Pizza> _pizzas = [];
-  final title = 'Nos pizzas';
+  late Future<List<Pizza>> _pizzas;
+  PizzeriaService _service = PizzeriaService();
   
   @override
   void initState() {
-    super.initState();
-    _pizzas = PizzaData.buildList();
+    _pizzas = _service.fetchPizzas();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(title, widget._cart),
-      body: ListView.builder(
-        padding:const EdgeInsets.all(8.0),
-        itemCount: _pizzas.length,
-        itemBuilder: (context, index) {
-          return _buildRow(_pizzas[index]);
+      appBar: AppbarWidget('Nos Pizzas', widget._cart),
+      body: FutureBuilder<List<Pizza>>(
+        future: _pizzas,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildListView(snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Impossible de récupérer les données : ${snapshot.error}',
+                style: PizzeriaStyle.errorTextStyle,
+              ),
+            );
           }
-        )
-      );
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+  _buildListView(List<Pizza> pizzas) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      itemCount: pizzas.length,
+      itemBuilder: (context, index) {
+        return _buildRow(pizzas[index]);
+      }
+    );
   }
 
   _buildRow(Pizza pizza) {
@@ -75,8 +93,8 @@ class _PizzaListState extends State<PizzaList> {
           subtitle: Text(pizza.garniture),
           leading: Icon(Icons.local_pizza),
         ),
-        Image.asset(
-          'assets/images/pizzas/${pizza.image}',
+        Image.network (
+          pizza.image,
           height: 120,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.fitWidth,

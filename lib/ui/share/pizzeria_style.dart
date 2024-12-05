@@ -29,5 +29,10 @@ class PizzeriaStyle {
     fontSize: 22.0,
   );
 
+  static final TextStyle errorTextStyle = TextStyle(
+    color: Colors.red,
+    fontSize: 22.0,
+  );
+
   static var subPriceTotalTextStyle;
 }

@@ -71,7 +71,7 @@ class _PanierState extends State<Panier> {
     return Row(
       children: [
         Image(
-          image: AssetImage('assets/images/pizzas/${item.pizza.image}'),
+          image: NetworkImage(item.pizza.image),
           height: 100,
         ),
         Column(
