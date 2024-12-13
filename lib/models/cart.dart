@@ -1,4 +1,5 @@
 import 'package:pizzeria/models/pizza.dart';
+import 'package:flutter/material.dart';
 
 class CartItem {
   final Pizza pizza;
@@ -7,7 +8,7 @@ class CartItem {
   CartItem(this.pizza, [this.quantity = 1]);
 }
 
-class Cart {
+class Cart extends ChangeNotifier {
   List<CartItem> _items = [];
 
   int TotalItems() { return _items.length; }
@@ -27,6 +28,7 @@ class Cart {
       CartItem item = _items[index];
       item.quantity++;
     }
+    notifyListeners();
   }
 
   void removeProduct(Pizza pizza) {
@@ -34,6 +36,7 @@ class Cart {
     if (index != -1) {
       _items.removeAt(index);
     }
+    notifyListeners();
   }
 
   double prixTotal() {
@@ -48,4 +51,38 @@ class Cart {
   CartItem getCartItem(int index) {
     return _items[index];
   }
+
+  int totalQuantity() {
+    int res = 0;
+    for (var item in _items) {
+      res += item.quantity;
+    }
+    return res;
+  }
+
+  void incrementQuantity(int pizzaId) {
+  int index = findCartItemIndex(pizzaId);
+  if (index != -1) {
+    _items[index].quantity++;
+    notifyListeners(); // Notifie les widgets pour mettre à jour l'UI
+  }
+}
+
+void decrementQuantity(int pizzaId) {
+  int index = findCartItemIndex(pizzaId);
+  if (index != -1) {
+    if (_items[index].quantity > 1) {
+      _items[index].quantity--;
+    } else {
+      _items.removeAt(index); // Supprime si la quantité atteint 0
+    }
+    notifyListeners();
+  }
+}
+
+void clearCart() {
+  _items.clear(); // Vide tout le panier
+  notifyListeners();
+}
+
 }

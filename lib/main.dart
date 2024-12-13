@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pizzeria/models/cart.dart';
 import 'package:pizzeria/ui/share/appbar_widget.dart';
+import 'package:provider/provider.dart';
 import 'models/menu.dart';
 import 'ui/pizza_list.dart';
+import 'package:pizzeria/ui/panier.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider( 
+      create: (context) => Cart(),
+      child: const MyApp()
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,13 +28,17 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      routes: {
+  '/panier': (context) => Panier(ModalRoute.of(context)!.settings.arguments as Cart),
+},
+
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
   final String title;
-  Cart _cart;
+  final Cart _cart;
 
   MyHomePage({required this.title, Key? key}) :
     _cart = Cart(), 

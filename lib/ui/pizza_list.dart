@@ -18,10 +18,11 @@ class PizzaList extends StatefulWidget {
 
 class _PizzaListState extends State<PizzaList> {
   late Future<List<Pizza>> _pizzas;
-  PizzeriaService _service = PizzeriaService();
+  final PizzeriaService _service = PizzeriaService();
   
   @override
   void initState() {
+    super.initState();
     _pizzas = _service.fetchPizzas();
   }
 
@@ -42,7 +43,7 @@ class _PizzaListState extends State<PizzaList> {
               ),
             );
           }
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
