@@ -17,7 +17,7 @@ class _CartListState extends State<CartList> {
   Widget build(BuildContext context) {
     var cart = context.watch<Cart>(); 
     return ListView.builder(
-      itemCount: cart.TotalItems(),
+      itemCount: cart.totalItems(),
       itemBuilder: (context, index) {
         var item = cart.getCartItem(index);
         return _buildCartItems(item);

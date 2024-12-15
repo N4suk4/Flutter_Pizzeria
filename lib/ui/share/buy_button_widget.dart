@@ -5,9 +5,8 @@ import 'package:provider/provider.dart';
 
 class BuyButtonWidget extends StatelessWidget {
   final Pizza _pizza;
-  final Cart _cart;
 
-  const BuyButtonWidget(this._pizza, this._cart, {Key? key}) : super(key: key);
+  const BuyButtonWidget(this._pizza,{Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +27,9 @@ class BuyButtonWidget extends StatelessWidget {
               ],
             ),
             onPressed: () {
+              final cart = Provider.of<Cart>(context, listen: false);
               print('Commande de la pizza');
-              _cart.addProduct(_pizza);
+              cart.addProduct(_pizza);
             },
           ),
         ],

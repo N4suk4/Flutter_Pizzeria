@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pizzeria/models/cart.dart';
 import 'package:pizzeria/ui/share/pizzeria_style.dart';
+import 'package:provider/provider.dart';
+import 'package:pizzeria/ui/bottom_navigation_bar_widget.dart';
 
 class Panier extends StatefulWidget {
-  final Cart _cart;
 
-  const Panier(this._cart, {super.key});
+  const Panier({super.key});
 
   @override
   State<Panier> createState() => _PanierState();
@@ -17,6 +18,7 @@ class _PanierState extends State<Panier> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Panier"),
@@ -25,33 +27,33 @@ class _PanierState extends State<Panier> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: widget._cart.TotalItems(),
+              itemCount: cart.totalItems(),
               itemBuilder: (context, index) =>
-                  _buildCartItems(widget._cart.getCartItem(index)),
+                  _buildCartItems(cart.getCartItem(index)),
             ),
           ),
           Table(
             children: [
               TableRow(children: [
                 Container(
-                  padding: EdgeInsets.only(left: 50),
+                  padding: const EdgeInsets.only(left: 50),
                 ),
-                Text("TOTAL HT"),
-                Text(format.format(widget._cart.prixTotal()))
+                const Text("TOTAL HT"),
+                Text(format.format(cart.prixTotal()))
               ]),
               TableRow(children: [
                 Container(
-                  padding: EdgeInsets.only(left: 50),
+                  padding: const EdgeInsets.only(left: 50),
                 ),
-                Text("TVA"),
-                Text(format.format(widget._cart.prixTotal() * 0.1))
+                const Text("TVA"),
+                Text(format.format(cart.prixTotal() * 0.1))
               ]),
               TableRow(children: [
                 Container(
-                  padding: EdgeInsets.only(left: 50),
+                  padding: const EdgeInsets.only(left: 50),
                 ),
-                Text("TOTAL TTC"),
-                Text(format.format(widget._cart.prixTotal() * 1.1))
+                const Text("TOTAL TTC"),
+                Text(format.format(cart.prixTotal() * 1.1))
               ])
             ],
           ),
@@ -60,10 +62,11 @@ class _PanierState extends State<Panier> {
                 onPressed: () {
                   print("Clear");
                 },
-                child: Text('Valider')),
+                child: const Text('Valider')),
           )
         ],
       ),
+      bottomNavigationBar: BottomNavigationBarWidget(2),
     );
   }
 

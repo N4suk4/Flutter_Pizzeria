@@ -11,7 +11,7 @@ class CartItem {
 class Cart extends ChangeNotifier {
   List<CartItem> _items = [];
 
-  int TotalItems() { return _items.length; }
+  int totalItems() { return _items.length; }
   CartItem GetItem(int index) { 
     return _items[index]; 
   }

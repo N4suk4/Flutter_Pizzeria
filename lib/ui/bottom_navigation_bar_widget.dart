@@ -44,11 +44,17 @@ class BottomNavigationBarWidget extends StatelessWidget {
       onTap: (index) {
         String page = '/';
         switch (index) {
+          case 0:
+            page = '/';
+            break;
+          case 1:
+            page = '/';
+            break;
           case 2:
             page = '/panier';
             break;
           case 3:
-            page = '/profil';
+            page = '/';
             break;
         }
         Navigator.pushNamed(context, page);

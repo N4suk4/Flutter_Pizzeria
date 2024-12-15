@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'models/menu.dart';
 import 'ui/pizza_list.dart';
 import 'package:pizzeria/ui/panier.dart';
+import 'package:pizzeria/ui/bottom_navigation_bar_widget.dart';
 
 
 void main() {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-  '/panier': (context) => Panier(ModalRoute.of(context)!.settings.arguments as Cart),
+  '/panier': (context) => Panier(),
 },
 
     );
@@ -38,11 +39,8 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   final String title;
-  final Cart _cart;
 
-  MyHomePage({required this.title, Key? key}) :
-    _cart = Cart(), 
-    super(key: key);
+  MyHomePage({required this.title, Key? key}) : super(key: key);
     
 
   final _menus = [
@@ -56,7 +54,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(title, _cart),
+      appBar: AppbarWidget(title),
       body: Center(
         child: ListView.builder(
           itemCount: _menus.length,
@@ -66,7 +64,7 @@ class MyHomePage extends StatelessWidget {
                 case 2:
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PizzaList(_cart)),
+                    MaterialPageRoute(builder: (context) => PizzaList()),
                   );
                   break;
               }
@@ -76,6 +74,7 @@ class MyHomePage extends StatelessWidget {
           itemExtent: 180,
         ),
       ),
+      bottomNavigationBar: BottomNavigationBarWidget(0),
     );
   }
 
