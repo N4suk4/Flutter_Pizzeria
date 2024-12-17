@@ -1,3 +1,4 @@
+import 'package:pizzeria/models/boisson.dart';
 import 'package:pizzeria/models/pizza.dart';
 import 'package:flutter/material.dart';
 
@@ -8,8 +9,15 @@ class CartItem {
   CartItem(this.pizza, [this.quantity = 1]);
 }
 
+class CartBoissonItem {
+  final Boisson boisson;
+  late int quantity;
+
+  CartBoissonItem(this.boisson, [this.quantity = 1]);
+}
+
 class Cart extends ChangeNotifier {
-  List<CartItem> _items = [];
+  final List<CartItem> _items = [];
 
   int totalItems() { return _items.length; }
   CartItem GetItem(int index) { 
@@ -84,5 +92,16 @@ void clearCart() {
   _items.clear(); // Vide tout le panier
   notifyListeners();
 }
+
+void addBoisson(Boisson boisson) {
+    int index = findCartItemIndex(boisson.id);
+    if (index == -1) {
+      _items.add(CartBoissonItem(boisson) as CartItem);
+    } else {
+      CartBoissonItem item = _items[index] as CartBoissonItem;
+      item.quantity++;
+    }
+    notifyListeners();
+  }
 
 }

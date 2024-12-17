@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pizzeria/models/cart.dart';
+import 'package:pizzeria/ui/boisson_list.dart';
 import 'package:pizzeria/ui/share/appbar_widget.dart';
 import 'package:provider/provider.dart';
 import 'models/menu.dart';
@@ -30,8 +31,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-  '/panier': (context) => Panier(),
-},
+        '/panier': (context) => const Panier(),
+    },
 
     );
   }
@@ -64,7 +65,13 @@ class MyHomePage extends StatelessWidget {
                 case 2:
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PizzaList()),
+                    MaterialPageRoute(builder: (context) => const PizzaList()),
+                  );
+                  break;
+                  case 4:
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BoissonList()),
                   );
                   break;
               }
@@ -74,7 +81,7 @@ class MyHomePage extends StatelessWidget {
           itemExtent: 180,
         ),
       ),
-      bottomNavigationBar: BottomNavigationBarWidget(0),
+      bottomNavigationBar: const BottomNavigationBarWidget(2),
     );
   }
 
